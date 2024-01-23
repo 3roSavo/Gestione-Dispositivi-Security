@@ -35,24 +35,16 @@ public class UtentiController {
         return utentiService.getAllUsers(page,size, sort);
     }
 
-    // POST - Aggiungi un utente
-    // URL http://localhost:3001/utenti     + (body)
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public DTOResponseUtenteLatoUtente creaUtente(@RequestBody @Validated NewUtenteRequestDTO utente, BindingResult validation) {
-        // Per completare la validazione devo in qualche maniera fare un controllo del tipo: se ci sono errori -> manda risposta con 400 Bad Request
-        if (validation.hasErrors()) {
-            //System.out.println(validation);
 
-            throw new BadRequestException("Ci sono errori nel payload :" + System.lineSeparator() +
-                    validation.getAllErrors().stream()
-                            .map(error -> error.getDefaultMessage())
-                            .collect(Collectors.joining(System.lineSeparator())));
-            // non so bene cosa faccia l'ultima riga ma stampa con successo in json tutti gli errori
-        } else {
-            return utentiService.salvaUtente(utente);
-        }
-    }
+
+    // ---------------  POST SPOSTATA IN AuthenticationController----------------
+    // prima il path era vuoto ma ora per evitare che il filtro JWTAuthenticationFilter mi chieda il token
+    // spostiamo la Post per creare un utente in AuthenticationController dove la path è /authentication  ---@RequestMapping("/authentication")---
+    // questo perché abbiamo aggiunto nel filtro JWTAuthenticationFilter un metodo per bypassarlo per rendere disponibile
+    // la login e la creazione di un utente senza il token. Nella login non ho il token, è proprio essa che me la da!
+
+
+
 
     // GET - Ricerca specifico Utente
     // URL http://localhost:3001/utenti/{idUtente}
