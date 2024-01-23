@@ -29,7 +29,7 @@ public class JWTTools {
         return accessToken;
     }
 
-    // Verifichiamo il token
+    // Verifichiamo se un token è scaduto o è stato manipolato
     public void verifyToken(String token){ // Dato un token lancia eccezioni in caso di token manipolati/scaduti
         try {
         Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
@@ -37,4 +37,15 @@ public class JWTTools {
             throw new UnauthorizedException("Problemi col token, effettua di nuovo il login");
         }
     }
+
+    // Metodo per estrarre l'id di un utente dato il suo token
+    public String extractIdFromToken(String token) {
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+
 }
