@@ -24,7 +24,7 @@ public class SecurityConfiguration {
         // Aggiungiamo/Rimuoviamo regole di protezione su singoli endpoint
         // in maniera che venga o non venga richiesta l'autenticazione per accedervi
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll());
-        //  tutte le richieste cui l'url seguono questo pattern saranno permesse. Questo pattern si riferisce a tute le richieste /**
+        //  tutte le richieste cui l'url seguono questo pattern saranno permesse. Questo pattern si riferisce a tutte le richieste /**
         return httpSecurity.build();
     }
 }

@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import savogineros.Gestionedispositivi.entities.Utente;
+import savogineros.Gestionedispositivi.exceptions.UnauthorizedException;
 
 import java.util.Date;
 @Component // Rendo la classe componente per recuperarmi attraverso @Value il valore del segreto
@@ -12,6 +13,7 @@ public class JWTTools {
     @Value("${spring.jwt.secret}") // Assegno a secret il valore di spring.jwt.secret
     private String secret;
 
+    // CLASSE PER CREAZIONE TOKEN E SUA VERIFICA, attraverso la libreria JJWT Jackson che mi da il metodo Jwts
     // Qui mi creerò il token per l'utente che ha superato i controlli della mail e password
     // Un token è composto da tre parti: HEADER, PAYLOAD, SIGNATURE
     // Per crearlo dovrò recuperare le sue componenti
@@ -27,7 +29,12 @@ public class JWTTools {
         return accessToken;
     }
 
-    public void verifyToken(){
-
+    // Verifichiamo il token
+    public void verifyToken(String token){ // Dato un token lancia eccezioni in caso di token manipolati/scaduti
+        try {
+        Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
+        } catch (Exception exception) {
+            throw new UnauthorizedException("Problemi col token, effettua di nuovo il login");
+        }
     }
 }
