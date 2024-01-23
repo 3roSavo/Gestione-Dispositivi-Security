@@ -26,6 +26,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             // Devo controllare che ci sia l'autorizzazione e che cominci con Bearer
             throw new UnauthorizedException("Per favore metti il token nell' Authorization header");
         } else {
+
             // Devo estrarmi il token tagliando via "Bearer "
             // si può utilizzare replace(), substring(), splice()?
             String accessToken = authHeader.substring(7);
